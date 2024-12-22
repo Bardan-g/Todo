@@ -1,31 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Todo = () => {
   const [task, settask] = useState("");
   const [desc, setdesc] = useState("");
   const [mainTask, setmainTask] = useState([])
-  const [inputValue, setinputValue] = useState("")
   const [erroMessage, seterroMessage] = useState("")
   const submitHandler =(e) =>{
     e.preventDefault()
+
+    if (!task.trim() || !desc.trim()){
+     return seterroMessage("What's Your Task ?");
+      
+  }
    setmainTask([...mainTask, {task, desc}])
+   console.log(task)
+   console.log(desc)
+    settask("");
+    setdesc("");
+    console.log()
 
-    settask("")
-    setdesc("")
-    console.log(mainTask)
-
-    if (!inputValue.trim()){
-        seterroMessage("What's Your Task ?");
-    }else{
-        seterroMessage(""),
-        console.log(inputValue)
-    }
   };
   const deleteHandler = (i) =>{
     let copytask =[...mainTask]
     copytask.splice(i,1)
     setmainTask(copytask)
   }
+  useEffect(()=>{
+    if (mainTask.length > 0) {
+      console.log("Current Tasks:", mainTask)
+      
+    }
+  },[mainTask])
   let renderTask = <h2>No Task Available</h2>
   if(mainTask.length>0){
     renderTask = mainTask.map ((t, i)=>{
@@ -52,10 +57,9 @@ const Todo = () => {
             type="text"
             placeholder="Enter Task"
             value={task}
-            value1={inputValue}
+            
             onChange={(e)=>{
                 settask(e.target.value)
-                setinputValue(e.target.value1)
             }}
           />
           <input
